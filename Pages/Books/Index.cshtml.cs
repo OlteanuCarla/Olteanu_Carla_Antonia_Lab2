@@ -23,7 +23,6 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Books
         public BookData BookD { get; set; }
         public int BookID { get; set; }
         public int CategoryID { get; set; }
-
         public string TitleSort { get; set; }
         public string AuthorSort { get; set; }
         public string CurrentFilter { get; set; }
@@ -42,6 +41,7 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Books
             .Include(b => b.Author)
             .Include(b => b.BookCategories)
             .ThenInclude(b => b.Category)
+            //.Include(b => b.Borrowing)
             .AsNoTracking()
             .OrderBy(b => b.Title)
             .ToListAsync();

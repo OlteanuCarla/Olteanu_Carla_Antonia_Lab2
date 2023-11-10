@@ -28,7 +28,8 @@ namespace Olteanu_Carla_Antonia_Lab2.Models
         public Publisher? Publisher { get; set; }
 
         [Display(Name = "Book Categories")]
-
+        public int? BorrowingID { get; set; }
+        public Borrowing? Borrowing { get; set; }
         public ICollection<BookCategory>? BookCategories { get; set; }
 
     }

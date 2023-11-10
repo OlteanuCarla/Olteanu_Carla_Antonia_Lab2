@@ -21,5 +21,16 @@ namespace Olteanu_Carla_Antonia_Lab2.Data
         public DbSet<Olteanu_Carla_Antonia_Lab2.Models.Author>? Authors { get; set; }
 
         public DbSet<Olteanu_Carla_Antonia_Lab2.Models.Category>? Category { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Book>()
+                .HasOne(e => e.Borrowing)
+            .WithOne(e => e.Book)
+                .HasForeignKey<Borrowing>("BookID");
+        }
+        
+        public DbSet<Olteanu_Carla_Antonia_Lab2.Models.Member>? Member { get; set; }
+
+        public DbSet<Olteanu_Carla_Antonia_Lab2.Models.Borrowing>? Borrowing { get; set; }
     }
 }
