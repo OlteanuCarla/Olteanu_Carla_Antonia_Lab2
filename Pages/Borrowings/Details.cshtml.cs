@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Olteanu_Carla_Antonia_Lab2.Data;
 using Olteanu_Carla_Antonia_Lab2.Models;
@@ -19,7 +20,10 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
             _context = context;
         }
 
-      public Borrowing Borrowing { get; set; } = default!; 
+      public Borrowing Borrowing { get; set; } = default!;
+
+      public string FullName { get; set; } = string.Empty;
+      public string BookTitle { get; set; } = string.Empty;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,7 +32,10 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
                 return NotFound();
             }
 
-            var borrowing = await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
+            var borrowing = await _context.Borrowing
+                .Include(b => b.Member)
+                .Include(b => b.Book)
+                .FirstOrDefaultAsync(m => m.ID == id);
             if (borrowing == null)
             {
                 return NotFound();
@@ -36,6 +43,8 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
             else 
             {
                 Borrowing = borrowing;
+                FullName = borrowing.Member?.FullName ?? "N/A";
+                BookTitle = borrowing.Book?.Title ?? "N/A";
             }
             return Page();
         }

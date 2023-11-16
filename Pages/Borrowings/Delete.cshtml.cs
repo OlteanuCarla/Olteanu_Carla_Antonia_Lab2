@@ -20,7 +20,9 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
         }
 
         [BindProperty]
-      public Borrowing Borrowing { get; set; } = default!;
+        public string FullName { get; set; } = string.Empty;
+        public string BookTitle { get; set; } = string.Empty;
+        public Borrowing Borrowing { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,7 +31,10 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
                 return NotFound();
             }
 
-            var borrowing = await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
+            var borrowing = await _context.Borrowing
+                .Include(b => b.Member)
+                .Include(b => b.Book)
+                .FirstOrDefaultAsync(m => m.ID == id);
 
             if (borrowing == null)
             {
@@ -38,6 +43,8 @@ namespace Olteanu_Carla_Antonia_Lab2.Pages.Borrowings
             else 
             {
                 Borrowing = borrowing;
+                FullName = borrowing.Member?.FullName ?? "N/A";
+                BookTitle = borrowing.Book?.Title ?? "N/A";
             }
             return Page();
         }
